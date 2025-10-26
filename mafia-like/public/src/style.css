@@ -1,0 +1,542 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap");
+
+html {
+  height: 100%;
+}
+
+body {
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: linear-gradient(135deg, #f5f0ff 0%, #fff5f7 50%, #f0f9ff 100%);
+  color: #2d2d3d;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  overflow: auto;
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+
+
+/* Make candlesticks much slimmer */
+.bar-grow {
+  width: 5px !important;
+  border-radius: 2px !important;
+  position: relative !important;
+  box-shadow: none !important;
+  background: linear-gradient(180deg, var(--candle-color, #10b981) 0%, var(--candle-color-dark, #059669) 100%) !important;
+  filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4)) !important;
+  animation: candleGrow 2.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Adjust wick proportions for slimmer candles */
+.bar-grow::before,
+.bar-grow::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  background: linear-gradient(180deg, var(--candle-color, #10b981), transparent);
+  opacity: 0.6;
+}
+
+.bar-grow::before {
+  top: -15px;
+  height: 15px;
+}
+
+.bar-grow::after {
+  bottom: -15px;
+  height: 15px;
+  background: linear-gradient(180deg, transparent, var(--candle-color, #10b981));
+}
+
+/* Enhanced candlestick animation with smooth growth */
+@keyframes candleGrow {
+  0% {
+    height: 0;
+    opacity: 0.5;
+    filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.2));
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    height: var(--bar-height);
+    opacity: 1;
+    filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.6));
+  }
+}
+
+/* Dynamic color styling for bullish (green) candles */
+div > div > div[style*="gridTemplateColumns"] > div:has(.bar-grow[style*="green"]),
+div > div > div[style*="gridTemplateColumns"] > div:has(.bar-grow[style*="rgb(0, 128, 0)"]) {
+  --candle-color: #10b981;
+  --candle-color-dark: #059669;
+}
+
+.bar-grow[style*="green"] {
+  --candle-color: #10b981 !important;
+  --candle-color-dark: #059669 !important;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%) !important;
+  filter: drop-shadow(0 0 12px rgba(16, 185, 129, 0.5)) !important;
+}
+
+/* Dynamic color styling for bearish (red) candles */
+.bar-grow[style*="red"] {
+  --candle-color: #ef4444 !important;
+  --candle-color-dark: #dc2626 !important;
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%) !important;
+  filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.5)) !important;
+}
+
+/* Add hover effect to candlesticks for interactivity */
+.bar-grow:hover {
+  filter: drop-shadow(0 0 20px rgba(99, 102, 241, 0.8)) brightness(1.15) !important;
+  transform: scaleY(1.05) !important;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Style the "No transactions" heading */
+h3 {
+  font-size: 1.6rem;
+  color: #4f46e5;
+  font-weight: 600;
+  margin: 2em 0;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Enhanced background with subtle animated gradient overlay */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 150vw;
+  height: 150vh;
+  z-index: -1;
+  opacity: 0.15;
+  transform-origin: center center;
+}
+
+body::before {
+  background-color: #6366f1;
+  transform: translate(-50%, -50%) rotate(-25deg);
+}
+
+body::after {
+  background-color: #ec4899;
+  transform: translate(-50%, -50%) rotate(15deg);
+}
+
+.home-shortcut {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  font-size: 1.5rem;
+  text-decoration: none;
+  z-index: 1000;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+
+#app {
+  max-width: 1000px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+  min-height: 100%;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* Enhanced container styling with better glassmorphism and shadows */
+div > div,
+form {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 28px;
+  padding: 2.5em;
+  margin: 2em 0;
+  transition: all 0.3s ease;
+}
+
+
+/* Refined typography with better hierarchy and elegance */
+h1,
+h2 {
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0.5em 0;
+}
+
+h1 {
+  font-size: 3.5rem;
+  background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-family: "Playfair Display", serif;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: 2.2rem;
+  color: #6366f1;
+  font-weight: 600;
+}
+
+/* Enhanced input and button styling with better interactions */
+input,
+button {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: 2px solid transparent;
+  margin: 8px;
+  display: inline-block;
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.2);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  cursor: pointer;
+}
+
+input {
+  background: rgba(255, 255, 255, 0.9);
+  color: #2d2d3d;
+  border: 2px solid rgba(99, 102, 241, 0.2);
+}
+
+input:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+  background: #fff;
+}
+
+button {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 700;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+  transition: left 0.3s ease;
+  z-index: -1;
+}
+
+button:hover,
+button:focus {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(99, 102, 241, 0.35);
+}
+
+button:active {
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+}
+
+/* Enhanced player button colors with gradient effects */
+.button-pressed-1 {
+  background: linear-gradient(135deg, #a78bfa 0%, #c4b5fd 100%) !important;
+  color: #fff !important;
+}
+
+.button-pressed-2 {
+  background: linear-gradient(135deg, #f472b6 0%, #fbcfe8 100%) !important;
+  color: #fff !important;
+}
+
+.button-pressed-3 {
+  background: linear-gradient(135deg, #a855f7 0%, #d8b4fe 100%) !important;
+  color: #fff !important;
+}
+
+.button-pressed-4 {
+  background: linear-gradient(135deg, #fbbf24 0%, #fcd34d 100%) !important;
+  color: #78350f !important;
+  font-weight: 700;
+}
+
+.button-pressed-5 {
+  background: linear-gradient(135deg, #38bdf8 0%, #7dd3fc 100%) !important;
+  color: #fff !important;
+}
+
+/* Refined animations with better easing */
+.counter-update {
+  animation: flash 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes flash {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.25);
+    color: #ec4899;
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.spinner {
+  display: inline-block;
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(99, 102, 241, 0.15);
+  border-top-color: #6366f1;
+  border-right-color: #ec4899;
+  border-radius: 50%;
+  animation: spin 1.2s linear infinite;
+  margin: 0 auto;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.bar-grow {
+  animation: barGrow 2.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes barGrow {
+  from {
+    height: 0;
+    width: 10px;
+    opacity: 0.7;
+  }
+  to {
+    height: var(--bar-height);
+    width: 10px;
+    opacity: 1;
+  }
+}
+
+/* Enhanced range input styling */
+input[type="range"] {
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: linear-gradient(to right, #ef4444, #fbbf24, #22c55e);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  transition: all 0.2s ease;
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+  transition: all 0.2s ease;
+}
+
+input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 6px 16px rgba(99, 102, 241, 0.5);
+}
+
+/* Improved list styling for players */
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 1.5em 0;
+}
+
+li {
+  padding: 12px 16px;
+  margin: 8px 0;
+  background: rgba(99, 102, 241, 0.05);
+  border-radius: 12px;
+  border-left: 4px solid #6366f1;
+  transition: all 0.3s ease;
+}
+
+li:hover {
+  background: rgba(99, 102, 241, 0.1);
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
+}
+
+/* Enhanced paragraph and text styling */
+p {
+  line-height: 1.6;
+  margin: 1em 0;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+/* Responsive design improvements */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 2.5rem;
+  }
+  h2 {
+    font-size: 1.8rem;
+  }
+  h3 {
+    font-size: 1.3rem;
+  }
+
+  div > div,
+  form {
+    padding: 1.5em;
+    border-radius: 20px;
+  }
+
+  input,
+  button {
+    font-size: 1rem;
+    padding: 12px 20px;
+    width: 100%;
+    margin: 6px 0;
+  }
+
+  div > div:has(> div > div > div[style*="gridTemplateColumns"]),
+  div > div:has(.bar-grow) {
+    padding: 2em 1.5em !important;
+  }
+  .bar-grow {
+  animation: growBar 0.6s ease forwards;
+}
+
+@keyframes growBar {
+  from { transform: scaleY(0); opacity: 0; }
+  to { transform: scaleY(1); opacity: 1; }
+}
+
+}
+/* Make candlesticks much slimmer and properly spaced */
+.bar-grow {
+  width: 10px !important;
+  gap: 100px !important;
+  border-radius: 2px !important;
+  position: relative !important;
+  box-shadow: none !important;
+  background: linear-gradient(180deg, var(--candle-color, #10b981) 0%, var(--candle-color-dark, #059669) 100%) !important;
+  filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.3)) !important;
+  animation: candleGrow 2.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+  border: 0.5px solid rgba(255, 255, 255, 0.4) !important;
+  margin: 0 auto !important;
+}
+
+/* Enhanced candlestick animation with smooth growth */
+@keyframes candleGrow {
+  0% {
+    height: 0px;
+    opacity: 0.5;
+    filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.2));
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    height: var(--bar-height) !important;
+    opacity: 1;
+    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
+  }
+}
+
+/* Dynamic color styling for bullish (green) candles */
+.bar-grow[style*="green"] {
+  --candle-color: #10b981 !important;
+  --candle-color-dark: #059669 !important;
+  margin-left: 20px !important;
+  background: linear-gradient(180deg, #10b981 0%, #059669 100%) !important;
+  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.4)) !important;
+}
+
+/* Dynamic color styling for bearish (red) candles */
+.bar-grow[style*="red"] {
+  --candle-color: #ef4444 !important;
+  --candle-color-dark: #dc2626 !important;
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%) !important;
+  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.4)) !important;
+}
+
+/* Container styling to ensure proper boundaries */
+div > div:has(> div > div[style*="display: flex"]) {
+  border: 1px solid rgba(99, 102, 241, 0.2) !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  backdrop-filter: blur(10px) !important;
+  padding: 15px !important;
+  margin: 20px 0 !important;
+  overflow: hidden !important;
+}
+
+/* Add hover effect to candlesticks */
+.bar-grow:hover {
+  filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.6)) brightness(1.1) !important;
+  transform: scaleX(1.3) !important;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  z-index: 10 !important;
+}
+
+/* Ensure the container properly constrains the candles */
+div[style*="display: flex"][style*="justify-content: space-between"] {
+  max-height: 80px !important;
+  min-height: 80px !important;
+  overflow: visible !important;
+}
