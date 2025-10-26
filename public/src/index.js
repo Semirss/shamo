@@ -147,7 +147,6 @@ const GamePage = ({ gameId, navigate }) => {
   const loadingRef = useRef(true);
   const prevGameState = useRef(null);
   const animationTimeoutRef = useRef(null);
-  const [displayedBank, setDisplayedBank] = useState(0);
   const [playerName, setPlayerName] = useState('');
 
   useEffect(() => {
@@ -168,6 +167,7 @@ const GamePage = ({ gameId, navigate }) => {
       const data = JSON.parse(event.data);
       if (data.gameState && data.gameState.id === gameId) {
         console.log('Game state update received for game', gameId);
+        console.log('Bank amount:', data.gameState.bank);
         console.log('Old players:', gameState ? gameState.players.length : 'none', 'New players:', data.gameState.players.length);
 
         // Play sounds for accusation results
@@ -184,7 +184,7 @@ const GamePage = ({ gameId, navigate }) => {
         if (data.gameState.state === 'processing' && data.gameState.pendingActions && data.gameState.pendingActions.length > 0) {
           if (animationTimeoutRef.current) clearTimeout(animationTimeoutRef.current);
           const num = data.gameState.pendingActions.length;
-          const duration = (num - 1) * 0.5 + 2 + 5; // seconds, plus 5s pause
+          const duration = (num - 1) * 0.5 + 2 + 5;
           animationTimeoutRef.current = setTimeout(() => {
             sendWsMessage('ANIMATIONS_DONE', { gameId });
           }, duration * 1000);
@@ -239,7 +239,6 @@ const GamePage = ({ gameId, navigate }) => {
   };
 
   if (!gameState) return html`<p>Loading game...</p>`;
-
 
   const formatCurrency = (amount) => amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
 
@@ -318,40 +317,55 @@ const GamePage = ({ gameId, navigate }) => {
             ...pendingBars
           ])
         ]);
-  case 'processing':
-  return h('div', {}, [
-  h('div', { style: { height: '200px', width: '500px', border: '1px solid #ccc', position: 'relative', margin: '20px auto', background: 'transparent', backdropFilter: 'none', borderRadius: '0', padding: '0', boxShadow: 'none' } }, [
-  h('div', { style: { position: 'absolute', top: '60px', left: 0, right: 0,  } }),
-  ...pendingBars
-  ])
-  ]);
-  case 'final_processing':
-    return h('div', {}, [
-      h('h2', {}, 'Accusation Results'),
-      gameState.accusationResult && h('div', { style: { textAlign: 'center', margin: '20px 0', fontSize: '2em', fontWeight: 'bold' } }, [
-        gameState.accusationResult.guilty ?
-          h('div', { style: { color: 'red' } }, `🔥 ${gameState.accusationResult.accused} was correctly accused! They pay out $${gameState.accusationResult.amount} 👹`) :
-          h('div', { style: { color: 'green' } }, `👼 ${gameState.accusationResult.accused} was falsely accused! They receive $${gameState.accusationResult.amount} 👼`)
-      ]),
-      h('p', {}, 'Finalizing round...')
-    ]);
-  case 'inprogress':
-    return h('div', {}, [
-      h('h2', {}, 'Round ' + gameState.round),
-        h('div', { style: { height: '200px', width: '500px', border: '1px solid #ccc', position: 'relative', margin: '20px auto', background: 'transparent', backdropFilter: 'none', borderRadius: '0', padding: '0', boxShadow: 'none' } }, [
-          h('div', { style: { position: 'absolute', top: '60px', left: 0, right: 0, } }),
+      case 'processing':
+        return h('div', {}, [
+          h('div', { style: { height: '200px', width: '500px', border: '1px solid #ccc', position: 'relative', margin: '20px auto', background: 'transparent', backdropFilter: 'none', borderRadius: '0', padding: '0', boxShadow: 'none' } }, [
+            h('div', { style: { position: 'absolute', top: '60px', left: 0, right: 0,  } }),
+            ...pendingBars
+          ])
+        ]);
+      case 'final_processing':
+        return h('div', {}, [
+          h('h2', {}, 'Accusation Results'),
+          gameState.accusationResult && h('div', { style: { textAlign: 'center', margin: '20px 0', fontSize: '2em', fontWeight: 'bold' } }, [
+            gameState.accusationResult.guilty ?
+              h('div', { style: { color: 'red' } }, `🔥 ${gameState.accusationResult.accused} was correctly accused! They pay out $${gameState.accusationResult.amount} 👹`) :
+              h('div', { style: { color: 'green' } }, `👼 ${gameState.accusationResult.accused} was falsely accused! They receive $${gameState.accusationResult.amount} 👼`)
+          ]),
+          h('p', {}, 'Finalizing round...')
+        ]);
+      case 'inprogress':
+        return h('div', {}, [
+          h('h2', {}, 'Round ' + gameState.round),
+          h('div', { style: { height: '200px', width: '500px', border: '1px solid #ccc', position: 'relative', margin: '20px auto', background: 'transparent', backdropFilter: 'none', borderRadius: '0', padding: '0', boxShadow: 'none' } }, [
+            h('div', { style: { position: 'absolute', top: '60px', left: 0, right: 0, } }),
             ...pendingBars
           ]),
           h('p', {}, 'Players, please submit your transactions!'),
           h('h3', {}, 'Transactions: ' + gameState.actionsReceived + ' / ' + (gameState.players && Array.isArray(gameState.players) ? gameState.players.filter(p => !p.jailed && !p.bankrupt).length : 0))
+        ]);
+      case 'gameover':
+        const sortedPlayers = [...gameState.players].sort((a, b) => b.cash - a.cash);
+        return h('div', {}, [
+          h('h1', { style: { textAlign: 'center' } }, 'SHAMO!'),
+          h('ul', { style: { listStyle: 'none', padding: 0 } },
+            sortedPlayers.map(p => h('li', { style: { color: p.bankrupt ? 'red' : 'green', fontSize: '1.5rem', textAlign: 'center' } },
+              p.name + ': ' + formatCurrency(p.cash)
+            ))
+          )
         ]);
       default:
         return '';
     }
   })();
 
+  if (gameState.state === 'gameover') {
+    return gameContent;
+  }
+
   return h('div', { style: { height: '100%' } }, [
-    h('h2', {}, 'Bank: ' + formatCurrency(displayedBank)),
+    // FIXED: Use actual bank from gameState instead of displayedBank
+    h('h2', {}, 'Bank: ' + formatCurrency(gameState ? gameState.bank : 0)),
     gameContent,
     h('h3', {}, 'Players:'),
     playersList

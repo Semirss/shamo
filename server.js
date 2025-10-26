@@ -44,7 +44,13 @@ const broadcastMessage = (msg) => {
 const getSanitizedGame = (gameId) => {
   const game = games[gameId];
   if (!game) return null;
-  const sanitizedPlayers = game.players && Array.isArray(game.players) ? game.players.map(p => ({ name: p.name, cash: p.cash, bankrupt: p.bankrupt, jailed: p.jailed, actionTaken: p.actionTaken, netGain: p.cash - (p.roundStartCash || 1200), accusationSent: p.accusationSent })) : [];
+  let sanitizedPlayers = game.players && Array.isArray(game.players) ? game.players.map(p => ({ name: p.name, cash: p.cash, bankrupt: p.bankrupt, jailed: p.jailed, actionTaken: p.actionTaken, netGain: p.cash - (p.roundStartCash || 1200), accusationSent: p.accusationSent })) : [];
+  
+  // When the game is over, sort players by cash in descending order for final scoreboard.
+  if (game.state === 'gameover') {
+    sanitizedPlayers.sort((a, b) => b.cash - a.cash);
+  }
+
   return {
     id: game.id,
     maxPlayers: game.maxPlayers,
@@ -149,34 +155,39 @@ wss.on('connection', ws => {
             // Set round start cash before updating
             game.players.forEach(p => p.roundStartCash = p.cash);
             // Update balances with transactions
-            const positives = game.players.filter(p => p.pendingAmount > 0).sort((a, b) => a.pendingAmount - b.pendingAmount);
-            for (const p of positives) {
-              p.cash -= p.pendingAmount;
-              game.bank += p.pendingAmount;
-            }
-              const negatives = game.players.filter(p => p.pendingAmount < 0).sort((a, b) => a.pendingAmount - b.pendingAmount);
-              for (const p of negatives) {
-                const amount = p.pendingAmount;
-                const absAmount = Math.abs(amount);
-                const tempBank = game.bank + amount;
-                if (tempBank >= 0) {
-                  p.cash -= amount;
-                  game.bank = tempBank;
-                } else {
-                  const charge = Math.min(absAmount, p.cash);
-                  p.cash -= charge;
-                  game.bank += charge;
-                  p.jailed = true;
-                  if (p.cash == 0) {
-                    p.bankrupt = true;
-                  }
-                }
-              }
+// In PLAYER_ACTION case:
+const positives = game.players.filter(p => p.pendingAmount > 0).sort((a, b) => a.pendingAmount - b.pendingAmount);
+for (const p of positives) {
+  p.cash -= p.pendingAmount;
+  game.bank += p.pendingAmount; // This should increaRse the bank
+}
+
+const negatives = game.players.filter(p => p.pendingAmount < 0).sort((a, b) => a.pendingAmount - b.pendingAmount);
+for (const p of negatives) {
+  const amount = p.pendingAmount;
+  const absAmount = Math.abs(amount);
+  const tempBank = game.bank + amount; // amount is negative, so this subtracts
+  
+  if (tempBank >= 0) {
+    p.cash -= amount; // amount is negative, so this adds to player cash
+    game.bank = tempBank; // bank decreases
+  } else {
+    const charge = Math.min(absAmount, p.cash);
+    p.cash -= charge;
+    game.bank += charge; // bank increases by what was actually charged
+    p.jailed = true;
+    if (p.cash == 0) {
+      p.bankrupt = true;
+    }
+  }
+}
               // Divide bank equally among unjailed and non-bankrupt players
               const activePlayers = game.players.filter(p => !p.jailed && !p.bankrupt);
               if (activePlayers.length > 0) {
                 const share = Math.floor(game.bank / activePlayers.length);
-                //activePlayers.forEach(p => p.cash += share*2);
+                activePlayers.forEach(p => {
+                  p.cash += share
+                });
                 //game.bank = 0;
               }
               // Unjail all players for the next round
@@ -278,14 +289,19 @@ wss.on('connection', ws => {
                 delete p.pendingAmount;
                 delete p.accusationSent;
               });
-              // proceed to final processing
-              game.state = 'final_processing';
-              broadcastGameState(gameId);
-              setTimeout(() => {
-                delete game.accusationResult;
-                game.state = 'inprogress';
+              if (game.round > Math.random()*10+5) {
+                game.state = 'gameover';
                 broadcastGameState(gameId);
-              }, 5000);
+              } else {
+                // proceed to final processing
+                game.state = 'final_processing';
+                broadcastGameState(gameId);
+                setTimeout(() => {
+                  delete game.accusationResult;
+                  game.state = 'inprogress';
+                  broadcastGameState(gameId);
+                }, 2000);
+              }
             }
           }
         }
