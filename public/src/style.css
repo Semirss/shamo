@@ -2,6 +2,7 @@
 
 html {
   height: 100%;
+  font-size: 14px;
 }
 
 body {
@@ -16,9 +17,10 @@ body {
   z-index: 1;
   min-height: 100vh;
   box-sizing: border-box;
+    display: flex;
+  justify-content: center; /* center horizontally */
+  align-items: center;     /* center vertically */
 }
-
-
 
 /* Make candlesticks much slimmer */
 .bar-grow {
@@ -137,34 +139,33 @@ body::after {
 
 .home-shortcut {
   position: fixed;
-  top: 20px;
-  left: 20px;
-  font-size: 1.5rem;
+  top: 15px;
+  left: 15px;
+  font-size: 1.2rem;
   text-decoration: none;
   z-index: 1000;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 50%;
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   border: 1px solid rgba(255, 255, 255, 0.5);
 }
 
-
 #app {
-  max-width: 1000px;
-  margin: 0 auto;
-  position: relative;
-  z-index: 2;
-  min-height: 100%;
-  padding: 20px;
+  width: 100%;
+  margin: 10px;
+  padding: 15px;
   box-sizing: border-box;
+  background: white; /* optional, to visualize */
+  border-radius: 10px; /* optional */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* optional */
 }
 
 /* Enhanced container styling with better glassmorphism and shadows */
@@ -172,10 +173,12 @@ div > div,
 form {
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border-radius: 28px;
-  padding: 2.5em;
-  margin: 2em 0;
+  border-radius: 20px;
+  padding: 1.5em;
+  margin: 1em 0;
   transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+
 }
 
 
@@ -189,7 +192,7 @@ h2 {
 }
 
 h1 {
-  font-size: 3.5rem;
+  font-size: 2.2rem;
   background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -199,7 +202,7 @@ h1 {
 }
 
 h2 {
-  font-size: 2.2rem;
+  font-size: 1.6rem;
   color: #6366f1;
   font-weight: 600;
 }
@@ -208,28 +211,33 @@ h2 {
 input,
 button {
   font-family: "Poppins", sans-serif;
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 600;
-  padding: 14px 28px;
+  padding: 12px 20px;
   border-radius: 12px;
   border: 2px solid transparent;
-  margin: 8px;
+  margin: 6px;
   display: inline-block;
-  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.2);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
   transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   cursor: pointer;
+  width: auto;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 input {
   background: rgba(255, 255, 255, 0.9);
   color: #2d2d3d;
   border: 2px solid rgba(99, 102, 241, 0.2);
+  width: 100%;
+  max-width: 280px;
 }
 
 input:focus {
   outline: none;
   border-color: #6366f1;
-  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.3);
   background: #fff;
 }
 
@@ -257,12 +265,12 @@ button::before {
 
 button:hover,
 button:focus {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(99, 102, 241, 0.35);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35);
 }
 
 button:active {
-  transform: translateY(-2px);
+  transform: translateY(0px);
 }
 
 button:disabled {
@@ -318,9 +326,9 @@ button:disabled {
 
 .spinner {
   display: inline-block;
-  width: 48px;
-  height: 48px;
-  border: 4px solid rgba(99, 102, 241, 0.15);
+  width: 40px;
+  height: 40px;
+  border: 3px solid rgba(99, 102, 241, 0.15);
   border-top-color: #6366f1;
   border-right-color: #ec4899;
   border-radius: 50%;
@@ -353,7 +361,8 @@ button:disabled {
 
 /* Enhanced range input styling */
 input[type="range"] {
-  width: 100%;
+  width: 90%;
+  max-width: 350px;
   height: 8px;
   border-radius: 5px;
   background: linear-gradient(to right, #ef4444, #fbbf24, #22c55e);
@@ -361,14 +370,15 @@ input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
   padding: 0;
-  margin: 20px 0;
+  margin: 20px auto;
+  display: block;
 }
 
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
   cursor: pointer;
@@ -382,8 +392,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 input[type="range"]::-moz-range-thumb {
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: linear-gradient(135deg, #6366f1 0%, #ec4899 100%);
   cursor: pointer;
@@ -401,14 +411,15 @@ input[type="range"]::-moz-range-thumb:hover {
 ul {
   list-style: none;
   padding: 0;
-  margin: 1.5em 0;
+  margin: 1em 0;
+  font-size: 1.1rem;
 }
 
 li {
-  padding: 12px 16px;
-  margin: 8px 0;
+  padding: 10px 14px;
+  margin: 6px 0;
   background: rgba(99, 102, 241, 0.05);
-  border-radius: 12px;
+  border-radius: 10px;
   border-left: 4px solid #6366f1;
   transition: all 0.3s ease;
 }
@@ -427,116 +438,252 @@ p {
   font-weight: 500;
 }
 
-/* Responsive design improvements */
-@media (max-width: 600px) {
-  h1 {
-    font-size: 2.5rem;
-  }
-  h2 {
-    font-size: 1.8rem;
-  }
-  h3 {
-    font-size: 1.3rem;
-  }
-
-  div > div,
-  form {
-    padding: 1.5em;
-    border-radius: 20px;
-  }
-
-  input,
-  button {
-    font-size: 1rem;
-    padding: 12px 20px;
-    width: 100%;
-    margin: 6px 0;
-  }
-
-  div > div:has(> div > div > div[style*="gridTemplateColumns"]),
-  div > div:has(.bar-grow) {
-    padding: 2em 1.5em !important;
-  }
-  .bar-grow {
-  animation: growBar 0.6s ease forwards;
-}
-
-@keyframes growBar {
-  from { transform: scaleY(0); opacity: 0; }
-  to { transform: scaleY(1); opacity: 1; }
-}
-
-}
-/* Make candlesticks much slimmer and properly spaced */
-.bar-grow {
-  width: 10px !important;
-  gap: 100px !important;
-  border-radius: 2px !important;
-  position: relative !important;
-  box-shadow: none !important;
-  background: linear-gradient(180deg, var(--candle-color, #10b981) 0%, var(--candle-color-dark, #059669) 100%) !important;
-  filter: drop-shadow(0 0 4px rgba(16, 185, 129, 0.3)) !important;
-  animation: candleGrow 2.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
-  border: 0.5px solid rgba(255, 255, 255, 0.4) !important;
-  margin: 0 auto !important;
-}
-
-/* Enhanced candlestick animation with smooth growth */
-@keyframes candleGrow {
-  0% {
-    height: 0px;
-    opacity: 0.5;
-    filter: drop-shadow(0 0 2px rgba(16, 185, 129, 0.2));
-  }
-  50% {
-    opacity: 0.8;
-  }
-  100% {
-    height: var(--bar-height) !important;
-    opacity: 1;
-    filter: drop-shadow(0 0 8px rgba(16, 185, 129, 0.4));
-  }
-}
-
-/* Dynamic color styling for bullish (green) candles */
-.bar-grow[style*="green"] {
-  --candle-color: #10b981 !important;
-  --candle-color-dark: #059669 !important;
-  margin-left: 20px !important;
-  background: linear-gradient(180deg, #10b981 0%, #059669 100%) !important;
-  filter: drop-shadow(0 0 6px rgba(16, 185, 129, 0.4)) !important;
-}
-
-/* Dynamic color styling for bearish (red) candles */
-.bar-grow[style*="red"] {
-  --candle-color: #ef4444 !important;
-  --candle-color-dark: #dc2626 !important;
-  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%) !important;
-  filter: drop-shadow(0 0 6px rgba(239, 68, 68, 0.4)) !important;
-}
-
-/* Container styling to ensure proper boundaries */
-div > div:has(> div > div[style*="display: flex"]) {
+/* Chart container responsive fixes */
+div > div:has(> div > div[style*="gridTemplateColumns"]) {
+  width: 100% !important;
+  max-width: 100% !important;
+  height: auto !important;
+  min-height: 180px !important;
+  margin: 15px 0 !important;
+  padding: 15px !important;
   border: 1px solid rgba(99, 102, 241, 0.2) !important;
   border-radius: 12px !important;
   background: rgba(255, 255, 255, 0.1) !important;
   backdrop-filter: blur(10px) !important;
-  padding: 15px !important;
-  margin: 20px 0 !important;
   overflow: hidden !important;
 }
-
-/* Add hover effect to candlesticks */
-.bar-grow:hover {
-  filter: drop-shadow(0 0 12px rgba(99, 102, 241, 0.6)) brightness(1.1) !important;
-  transform: scaleX(1.3) !important;
-  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
-  z-index: 10 !important;
+.deletebutton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ff4b4b, #b80000);
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
 }
 
-/* Ensure the container properly constrains the candles */
-div[style*="display: flex"][style*="justify-content: space-between"] {
-  max-height: 80px !important;
-  min-height: 80px !important;
-  overflow: visible !important;
+/* Hover and press animations */
+.deletebutton:hover {
+  background: linear-gradient(145deg, #ff5c5c, #d10000);
+  box-shadow: 0 6px 14px rgba(255, 0, 0, 0.4);
+  transform: scale(1.08);
+}
+
+.deletebutton:active {
+  transform: scale(0.95);
+  background: linear-gradient(145deg, #d10000, #a80000);
+}
+/* Responsive grid for candlesticks */
+div[style*="gridTemplateColumns"] {
+  grid-template-columns: repeat(auto-fit, minmax(6px, 1fr)) !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  margin: 0 auto !important;
+  padding: 0 10px !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  html {
+    font-size: 13px;
+  }
+  input[type="range"] {
+  width: 90%;
+  max-width: 350px;
+  height: 1px;
+  border-radius: 5px;
+  background: linear-gradient(to right, #ef4444, #fbbf24, #22c55e);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+  margin: 20px auto;
+  display: block;
+}
+  #app {
+    padding: 10px;
+  }
+  
+  .home-shortcut {
+    top: 10px;
+    left: 10px;
+    width: 35px;
+    height: 35px;
+    font-size: 1rem;
+  }
+  
+  h1 {
+    font-size: 1.8rem;
+  }
+  
+  h2 {
+    font-size: 1.3rem;
+  }
+  
+  h3 {
+    font-size: 1.1rem;
+    margin: 1em 0;
+  }
+  
+  div > div,
+  form {
+    padding: 1.2em;
+    border-radius: 16px;
+    margin: 0.8em 0;
+  }
+  
+  input,
+  button {
+    width: 100%;
+    margin: 4px 0;
+    display: block;
+    font-size: 0.9rem;
+    padding: 10px 16px;
+  }
+  
+  input {
+    max-width: none;
+  }
+  
+  ul {
+    font-size: 1rem;
+  }
+  
+  li {
+    padding: 8px 12px;
+    margin: 4px 0;
+    font-size: 0.9rem;
+  }
+  
+  .bar-grow {
+    width: 4px !important;
+  }
+  .deletebutton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #ff4b4b, #b80000);
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(255, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+}
+
+/* Hover and press animations */
+.deletebutton:hover {
+  background: linear-gradient(145deg, #ff5c5c, #d10000);
+  box-shadow: 0 6px 14px rgba(255, 0, 0, 0.4);
+  transform: scale(1.08);
+}
+
+.deletebutton:active {
+  transform: scale(0.95);
+  background: linear-gradient(145deg, #d10000, #a80000);
+}
+  div[style*="gridTemplateColumns"] {
+    gap: 6px !important;
+    padding: 0 5px !important;
+  }
+}
+
+/* Small mobile devices */
+@media (max-width: 480px) {
+  html {
+    font-size: 12px;
+  }
+  input[type="range"] {
+  width: 90%;
+  max-width: 350px;
+  height: 8px;
+  border-radius: 5px;
+  background: linear-gradient(to right, #ef4444, #fbbf24, #22c55e);
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 0;
+  margin: 20px auto;
+  display: block;
+}
+  .deletebutton {
+    width: 35px !important;
+    height: 35px !important;
+    top: 6px;
+    right: 6px;
+    font-size: 20px;
+    background: linear-gradient(145deg, #ff3030, #b00000);
+    box-shadow: 0 3px 8px rgba(255, 0, 0, 0.35);
+  }
+.inprogress-container{
+  width: 300px!important;
+}
+
+.pendings-bars{
+  margin-left: 130px!important;
+  margin-top: 50px!important;
+}
+  #app {
+    padding: 8px;
+  }
+  
+  h1 {
+    font-size: 1.6rem;
+  }
+  
+  h2 {
+    font-size: 1.2rem;
+  }
+  
+  div > div,
+  form {
+    padding: 1em;
+    margin: 0.6em 0;
+  }
+  
+  input[type="range"] {
+    width: 95%;
+
+  }
+  
+  .home-shortcut {
+    width: 32px;
+    height: 3px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1200px) {
+  #app {
+    max-width: 1000px;
+    padding: 20px;
+  }
+}
+
+/* Touch device improvements */
+@media (hover: none) and (pointer: coarse) {
+ 
+  
+  .bar-grow:hover {
+    transform: none !important;
+  }
 }

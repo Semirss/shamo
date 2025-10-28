@@ -6,7 +6,7 @@ const html = htm.bind(h);
 
 const INITIAL_CASH = 1200;
 
-const ws = new WebSocket(`wss://${window.location.host}`);
+const ws = new WebSocket(`ws://${window.location.host}`);
 let messageQueue = [];
 
 ws.onopen = () => {
@@ -85,7 +85,7 @@ const App = () => {
   }
 
   return html`
-    <div style=\"background:white; padding: 20px;\">
+    <div style=\"background:white;  padding: 20px;\ ">
       <a href="/" onClick=${(e) => { e.preventDefault(); navigate('/'); }} class="home-shortcut">🏠</a>
       ${page}
     </div>
@@ -131,7 +131,12 @@ const HomePage = ({ navigate }) => {
           <div key=${game.id} style="position: relative; border: 1px solid #000000ff; padding: 10px; margin-bottom: 10px;shadow: 0 0 10px rgba(0, 0, 0, 0.1); border-radius: 20px; background: white; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
           <p>Game ${game.id} (${game.players}/${game.maxPlayers})</p>
           <button onClick=${() => navigate(`/game/${game.id}`)}>View</button>
-            <button onClick=${() => sendWsMessage('DELETE_GAME', { gameId: game.id })} style="position: absolute; top: 0; right: 0; background: red; color: white; border: none; cursor: pointer;">X</button>
+<button
+  class="deletebutton"
+  onClick=${() => sendWsMessage('DELETE_GAME', { gameId: game.id })}
+>
+  ✕
+</button>
             </div>
         `)}
       </div>
@@ -279,7 +284,7 @@ const GamePage = ({ gameId, navigate }) => {
     const maxAbs = Math.max(...gameState.pendingActions.map(pa => Math.abs(pa.amount)));
     if (maxAbs === 0) return [h('h3', { style: { textAlign: 'center' } }, 'No transactions')];
     return [
-      h('div', { style: { display: 'grid', gridTemplateColumns: `repeat(${num}, 10px)`, gridTemplateRows: '10px 10px', width: `${num * 10}px`, margin: '0 auto', background: 'transparent', borderRadius: '0', padding: '0', boxShadow: 'none' } },
+      h('div', {className: 'pendings-bars',style: { display: 'grid', gridTemplateColumns: `repeat(${num}, 10px)`, gridTemplateRows: '10px 10px', width: `${num * 10}px`, margin: '0 auto', background: 'transparent', borderRadius: '0', padding: '0', boxShadow: 'none' } },
         gameState.pendingActions.map((pa, i) => {
           const absHeight = (Math.abs(pa.amount) / maxAbs) * 60;
           const isPositive = pa.amount >= 0;
@@ -337,8 +342,8 @@ const GamePage = ({ gameId, navigate }) => {
       case 'inprogress':
         return h('div', {}, [
           h('h2', {}, 'Round ' + gameState.round),
-          h('div', { style: { height: '200px', width: '500px', border: '1px solid #ccc', position: 'relative', margin: '20px auto', background: 'transparent', backdropFilter: 'none', borderRadius: '0', padding: '0', boxShadow: 'none' } }, [
-            h('div', { style: { position: 'absolute', top: '60px', left: 0, right: 0, } }),
+          h('div',   {className: 'inprogress-container', style: { height: '200px', width: '500px', border: '1px solid #ccc', position: 'relative', margin: '20px auto', background: 'transparent', backdropFilter: 'none', borderRadius: '0', padding: '0', boxShadow: 'none' } }, [
+            h('div',{ style: { position: 'absolute', top: '60px', left: 0, right: 0, } }),
             ...pendingBars
           ]),
           h('p', {}, 'Players, please submit your transactions!'),
