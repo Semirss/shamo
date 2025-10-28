@@ -6,7 +6,7 @@ const html = htm.bind(h);
 
 const INITIAL_CASH = 1200;
 
-const ws = new WebSocket(`ws://${window.location.host}`);
+const ws = new WebSocket(`wss://${window.location.host}`);
 let messageQueue = [];
 
 ws.onopen = () => {
