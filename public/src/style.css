@@ -640,9 +640,12 @@ div[style*="gridTemplateColumns"] {
 .pendings-bars{
   margin-left: 130px!important;
   margin-top: 50px!important;
+
 }
+
   #app {
     padding: 8px;
+    overflow-x: hidden!important;
   }
   
   h1 {

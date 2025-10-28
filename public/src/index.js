@@ -340,7 +340,7 @@ const GamePage = ({ gameId, navigate }) => {
           h('p', {}, 'Finalizing round...')
         ]);
       case 'inprogress':
-        return h('div', {}, [
+        return h('div', {className: 'inprogress-co'}, [
           h('h2', {}, 'Round ' + gameState.round),
           h('div',   {className: 'inprogress-container', style: { height: '200px', width: '500px', border: '1px solid #ccc', position: 'relative', margin: '20px auto', background: 'transparent', backdropFilter: 'none', borderRadius: '0', padding: '0', boxShadow: 'none' } }, [
             h('div',{ style: { position: 'absolute', top: '60px', left: 0, right: 0, } }),
